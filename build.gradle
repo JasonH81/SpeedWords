@@ -1,0 +1,5 @@
+dependencies {
+    implementation project('C:/Users/jphoe/OneDrive/eclipse-workspace/My Common Methods')
+    implementation project('C:/Users/jphoe/OneDrive/eclipse-workspace/My Components')
+    implementation project('C:/Users/jphoe/git/TimerProject')
+}
