@@ -20,12 +20,14 @@ import jason.mycomponents.TitleLabel;
 public class SpeedWords extends JFrame {
  
 	private static final long serialVersionUID = 1L;
-	private static final Color TAN = new Color(222,191,168);
+	public static final Color TAN = new Color(222,191,168);
 	private static final Font LIST_FONT = new Font(Font.DIALOG,Font.BOLD,14);
 	
 	private ScorePanel scorePanel = new ScorePanel(0,TAN);
 	private SpeedWordsTimerPanel swTimerPanel = new SpeedWordsTimerPanel(this,60);
 	private JTextArea textArea = new JTextArea();
+	private GamePanel gamePanel = new GamePanel(this);
+	
 	
 	public SpeedWords() {
 		initGUI();
@@ -68,7 +70,7 @@ public class SpeedWords extends JFrame {
 		
 		
 		// game panel
-		
+		leftPanel.add(gamePanel);
 		
 		// text area
 		Insets insets = new Insets(4,10,10,4);

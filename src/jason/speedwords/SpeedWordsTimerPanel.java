@@ -13,7 +13,7 @@ public class SpeedWordsTimerPanel extends NoTimerPanel {
 	
 	public SpeedWordsTimerPanel(SpeedWords speedWords, int time) {
 		super(time, FONT);
-		speedWords = this.speedWords;
+		this.speedWords = speedWords;
 	}
 
 }
