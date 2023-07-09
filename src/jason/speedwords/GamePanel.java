@@ -21,6 +21,9 @@ public class GamePanel extends JPanel {
 		// draw background
 		g.setColor(SpeedWords.TAN);
 		g.fillRect(0, 0, WIDTH, HEIGHT);
+		
+		LetterTile tile = new LetterTile("I");
+		tile.draw(g, 100, 100);
 	}
 	
 	public Dimension getPreferredSize() {
