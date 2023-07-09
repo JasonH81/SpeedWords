@@ -2,6 +2,9 @@ package jason.speedwords;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -22,12 +25,34 @@ public class GamePanel extends JPanel {
 	private ArrayList<TileSet> tileSets = new ArrayList<TileSet>();
 	private ArrayList<String> sevenLetterWords = new ArrayList<String>();
 	private Random rand = new Random();
+	private TileSet movingTiles;
+	private int mouseX;
+	private int mouseY;
 	
 	public GamePanel(SpeedWords speedWords) {
 		this.speedWords = speedWords;
 		
 		sevenLetterWords = FileIO.readTextFile(this,FILE_NAME);
 		restart();
+		
+		addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				int x = e.getX();
+				int y = e.getY();
+				clicked(x,y);
+			}
+			public void mouseReleased(MouseEvent e) {
+				released();
+			}
+		});
+		
+		addMouseMotionListener(new MouseMotionAdapter() {
+			public void mouseDragged(MouseEvent e) {
+				int x = e.getX();
+				int y = e.getY();
+				dragged(x,y);
+			}
+		});
 	}
 	
 	public void paintComponent(Graphics g) {
@@ -39,6 +64,11 @@ public class GamePanel extends JPanel {
 		for (int i=tileSets.size()-1;i>=0;i--) {
 			TileSet tileSet = tileSets.get(i);
 			tileSet.draw(g);
+		}
+		
+		// draw the moving tiles 
+		if (movingTiles!=null) {
+			movingTiles.draw(g);
 		}
 	}
 	
@@ -56,5 +86,46 @@ public class GamePanel extends JPanel {
 		tileSets.add(tileSet);
 		repaint();
 	}
-
+	
+	private void clicked(int x, int y) {
+		if (movingTiles==null) {
+			mouseX = x;
+			mouseY = y;
+			for (int i=0; i<tileSets.size() && movingTiles==null; i++) {
+				TileSet tileSet = tileSets.get(i);
+				if (tileSet.contains(x, y)) {
+					movingTiles = tileSet;
+					tileSets.remove(i);
+				}
+			}
+			repaint();
+		}
+	}
+	
+	private void released() {
+		// if dropped on other tiles, connect it to the tiles
+		
+		
+		// if not dropped on other tiles, return it to the list of tile sets
+		if (movingTiles!=null) {
+			String s = movingTiles.toString();
+			int x = movingTiles.getX();
+			int y = movingTiles.getY();
+			TileSet newTileSet = new TileSet(s, x, y);
+			tileSets.add(0, newTileSet);
+			movingTiles=null;
+		}
+		repaint();
+	}
+	
+	private void dragged(int x, int y) {
+		if (movingTiles!=null) {
+			int changeX = x-mouseX;
+			int changeY = y-mouseY;
+			movingTiles.changeXY(changeX, changeY);
+			mouseX = x;
+			mouseY = y;
+			repaint();
+		}
+	}
 }

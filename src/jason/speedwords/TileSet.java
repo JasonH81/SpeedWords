@@ -29,5 +29,51 @@ public class TileSet {
 			tile.draw(g, xPos, y);
 		}
 	}
+	
+	public void changeXY(int changeX, int changeY) {
+		x += changeX;
+		y += changeY;
+	}
+	
+	private int getWidth() {
+		int width = tiles.size() * LetterTile.SIZE;
+		return width;
+	}
+	
+	public boolean contains(int pointX, int pointY) {
+		boolean contains = false;
+		int width = getWidth();
+		int height = LetterTile.SIZE;
+		if (pointX>=x && pointX<x+width && pointY>=y && pointY<y+height) {
+			contains = true;
+		}
+		return contains;
+	}
+	
+	public String toString() {
+		String s = "";
+		for (int i=0; i<tiles.size(); i++) {
+			LetterTile tile = tiles.get(i);
+			String s2 = tile.getLetter();
+			s += s2;
+		}
+		return s;
+	}
+	
+	public int getX() {
+		return x;
+	}
+	
+	public int getY() {
+		return y;
+	}
+	
+	public int getNumberOfTiles() {
+		return tiles.size();
+	}
+	
+	public LetterTile getTile(int i) {
+		return tiles.get(i);
+	}
 
 }
