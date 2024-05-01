@@ -80,6 +80,48 @@ public class TileSet {
 		return tileSet;
 	}
 	
+	public boolean insertTiles(TileSet droppedTiles) {
+		boolean inserted = false;
+		int droppedTilesWidth = droppedTiles.getWidth();
+		int droppedTilesHeight = LetterTile.SIZE;
+		
+		int droppedTilesLeft = droppedTiles.getX();
+		int droppedTilesRight = droppedTilesLeft + droppedTilesWidth;
+		
+		int droppedTilesTop = droppedTiles.getY();
+		int droppedTilesBottom = droppedTilesTop + droppedTilesHeight;
+		
+		// If dropped tiles overlap the row
+		if (droppedTilesBottom>y && droppedTilesTop<y+droppedTilesHeight) {
+			
+		// If the dropped tiles overlap the left edge of the first tile
+		if (droppedTilesRight>=x && droppedTilesRight<=x+LetterTile.SIZE) {
+		// Insert the dropped tiles before the tiles onto which they were dropped
+			for (int i=0; i<droppedTiles.getNumberOfTiles(); i++) {
+				LetterTile tile = droppedTiles.getTile(i);
+				tiles.add(i,tile);
+				inserted = true;
+			}
+			x -= droppedTilesWidth;
+		}
+		else {
+		// Otherwise, if the dropped tiles overlap any other tile
+			for (int i=0; i<droppedTiles.getNumberOfTiles(); i++) {
+				int compareX = x+LetterTile.SIZE*i;
+				if (droppedTilesLeft >= compareX && droppedTilesLeft <= compareX + LetterTile.SIZE) {
+					// Insert the dropped tiles after the first overlapped tile
+					for (int j=0; j<droppedTiles.getNumberOfTiles(); j++) {
+							LetterTile tile = droppedTiles.getTile(j);
+							tiles.add(i+1+j,tile);
+							inserted = true;
+						}
+					}
+				}
+			}
+		}
+		return inserted;
+	}
+	
 	public int getX() {
 		return x;
 	}

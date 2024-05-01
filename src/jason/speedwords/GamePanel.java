@@ -115,7 +115,16 @@ public class GamePanel extends JPanel {
 	
 	private void released() {
 		// if dropped on other tiles, connect it to the tiles
-		
+		if (movingTiles!=null) {
+			boolean addedToTiles = false;
+			for (int i=0; i<tileSets.size() && addedToTiles==false; i++) {
+				TileSet tileSet = tileSets.get(i);
+				addedToTiles = tileSet.insertTiles(movingTiles);
+				if (addedToTiles = true) {
+					movingTiles = null;
+				}
+			}
+		}
 		
 		// if not dropped on other tiles, return it to the list of tile sets
 		if (movingTiles!=null) {
