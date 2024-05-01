@@ -60,6 +60,26 @@ public class TileSet {
 		return s;
 	}
 	
+	public TileSet removeAndReturn1TileAt(int clickedX, int clickedY) {
+		TileSet tileSet = null;
+		for (int i=0; i<tiles.size() && tileSet==null; i++) {
+			int tileLeftEdge = x + LetterTile.SIZE*i;
+			int tileRightEdge = tileLeftEdge + LetterTile.SIZE;
+			int tileTopEdge = y;
+			int tileBottomEdge = y+ LetterTile.SIZE;
+			if (clickedX>=tileLeftEdge && clickedX<=tileRightEdge && clickedY>=tileTopEdge && clickedY<=tileBottomEdge) {
+				LetterTile tile = tiles.get(i);
+				String letter = tile.getLetter();
+				tileSet = new TileSet(letter, tileLeftEdge, tileTopEdge);
+				tiles.remove(i);
+				if (i==0) {
+					x += LetterTile.SIZE;
+				}
+			}
+		}
+		return tileSet;
+	}
+	
 	public int getX() {
 		return x;
 	}

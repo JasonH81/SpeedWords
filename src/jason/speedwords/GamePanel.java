@@ -39,7 +39,9 @@ public class GamePanel extends JPanel {
 			public void mousePressed(MouseEvent e) {
 				int x = e.getX();
 				int y = e.getY();
-				clicked(x,y);
+				int mouseButton = e.getButton();
+				boolean leftClicked = mouseButton==MouseEvent.BUTTON1;
+				clicked(x,y,leftClicked);
 			}
 			public void mouseReleased(MouseEvent e) {
 				released();
@@ -87,15 +89,24 @@ public class GamePanel extends JPanel {
 		repaint();
 	}
 	
-	private void clicked(int x, int y) {
+	private void clicked(int x, int y, boolean leftClicked) {
 		if (movingTiles==null) {
 			mouseX = x;
 			mouseY = y;
+			
 			for (int i=0; i<tileSets.size() && movingTiles==null; i++) {
 				TileSet tileSet = tileSets.get(i);
 				if (tileSet.contains(x, y)) {
+					if (leftClicked) {
+						movingTiles = tileSet.removeAndReturn1TileAt(x, y);
+						if (tileSet.getNumberOfTiles()==0) {
+							tileSets.remove(i);
+						}
+					}
+					else {
 					movingTiles = tileSet;
 					tileSets.remove(i);
+					}
 				}
 			}
 			repaint();
