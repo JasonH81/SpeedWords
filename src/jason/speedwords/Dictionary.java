@@ -68,7 +68,14 @@ public class Dictionary {
 	}
 
 	public static void main(String[] args) {
-		
+		Dictionary dictionary = new Dictionary();
+		String word = "testrere";
+		if (dictionary.isAWord(word)) {
+			System.out.println(word + " is a word");
+		}
+		else {
+			System.out.println(word + " is not a word");
+		}
 	}
 
 }

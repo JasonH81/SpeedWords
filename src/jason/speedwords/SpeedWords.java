@@ -5,9 +5,11 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Insets;
+import java.util.ArrayList;
 
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -24,7 +26,7 @@ public class SpeedWords extends JFrame {
 	private static final Font LIST_FONT = new Font(Font.DIALOG,Font.BOLD,14);
 	
 	private ScorePanel scorePanel = new ScorePanel(0,TAN);
-	private SpeedWordsTimerPanel swTimerPanel = new SpeedWordsTimerPanel(this,60);
+	private SpeedWordsTimerPanel swTimerPanel = new SpeedWordsTimerPanel(this, 60);
 	private JTextArea textArea = new JTextArea();
 	private GamePanel gamePanel = new GamePanel(this);
 	
@@ -39,6 +41,7 @@ public class SpeedWords extends JFrame {
 		setVisible(true);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
+		swTimerPanel.start();
 	}
 	
 	private void initGUI() {
@@ -82,6 +85,36 @@ public class SpeedWords extends JFrame {
 		Dimension size = new Dimension(100,0);
 		scrollPane.setPreferredSize(size);
 		mainPanel.add(scrollPane);
+	}
+	
+	public void addToScore(int newPoints) {
+		scorePanel.addToScore(newPoints);
+	}
+	
+	public void setWordList(ArrayList<String> wordList) {
+		String s = "";
+		for (int i = 0; i<wordList.size(); i++) {
+			String word = wordList.get(i);
+			s += word + "\n";
+		}
+		textArea.setText(s);
+	}
+	
+	public void outOfTime() {
+		gamePanel.setOutOfTime(true);
+		
+		String message = "Times up! Would you like to play again?";
+		int option = JOptionPane.showConfirmDialog(this, message, "Play Again?", JOptionPane.YES_NO_OPTION);
+		if (option == JOptionPane.YES_OPTION) {
+			textArea.setText("");
+			scorePanel.reset();
+			gamePanel.restart();
+			swTimerPanel.setTime(60);
+			swTimerPanel.start();
+		}
+		else {
+			System.exit(0);
+		}
 	}
 
 	public static void main(String[] args) {
